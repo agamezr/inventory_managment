@@ -1,8 +1,8 @@
 """Create tables
 
-Revision ID: bf73826f42cd
+Revision ID: 14dcb88c2b3f
 Revises: 
-Create Date: 2025-02-07 02:01:33.594602
+Create Date: 2025-02-07 03:38:54.755985
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'bf73826f42cd'
+revision: str = '14dcb88c2b3f'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -58,4 +58,5 @@ def downgrade() -> None:
     op.drop_table('movements')
     op.drop_table('inventory')
     op.drop_table('products')
+    op.execute("DROP TYPE IF EXISTS movementtype")
     # ### end Alembic commands ###

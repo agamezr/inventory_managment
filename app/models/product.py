@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, DECIMAL, ForeignKey, DateTime, Enum
-from datetime import datetime
 from app.config.database import meta, engine, Base
+from sqlalchemy.orm import relationship
 
 class Product(Base):
     __tablename__ = 'products'
@@ -11,3 +11,6 @@ class Product(Base):
     category = Column(String, nullable=False)
     price = Column(DECIMAL(10, 2), nullable=False)
     sku = Column(String, unique=True, nullable=False)
+
+    inventories = relationship("Inventory", back_populates="product")
+    movements = relationship("Movement", back_populates="product")

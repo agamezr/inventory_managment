@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Integer, DECIMAL, ForeignKey, DateTime, Enum
-from datetime import datetime
 from app.config.database import meta, engine, Base
-
+from sqlalchemy.orm import relationship
 
 class Inventory(Base):
     __tablename__ = 'inventory'
@@ -11,3 +10,5 @@ class Inventory(Base):
     store_id = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False, default=0)
     min_stock = Column(Integer, nullable=False, default=0)
+
+    product = relationship("Product", back_populates="inventories")

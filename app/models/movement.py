@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Integer, DECIMAL, ForeignKey, DateTime, Enum
 from datetime import datetime
+from sqlalchemy.orm import relationship
 from app.config.database import meta, engine, Base
 import enum
 
@@ -19,3 +20,5 @@ class Movement(Base):
     quantity = Column(Integer, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
     type = Column(Enum(MovementType), nullable=False)
+
+    product = relationship("Product", back_populates="movements")
