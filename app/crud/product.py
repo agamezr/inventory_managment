@@ -3,6 +3,7 @@ from app.models.product import Product
 from app.models.inventory import Inventory
 from sqlalchemy.sql import func
 from app.schemas.product import ProductNew
+from sqlalchemy.exc import IntegrityError
 import uuid
 
 def get_all_products(
@@ -53,6 +54,11 @@ def get_product_by_id(db: Session, id: str):
     ).outerjoin(Inventory).filter(Product.id == id).group_by(Product.id).first()
 
 def create_product(db: Session, product_params: ProductNew):
+
+    existing_product = db.query(Product).filter(Product.sku == product_params.sku).first()
+    if existing_product:
+        raise ValueError("SKU already exists.")
+    
     product = Product(
         id = str(uuid.uuid4()),
         name = product_params.name,
@@ -62,7 +68,11 @@ def create_product(db: Session, product_params: ProductNew):
         sku = product_params.sku
     )
 
-    db.add(product)
-    db.commit()
-    db.refresh(product)
-    return product
+    try:
+        db.add(product)
+        db.commit()
+        db.refresh(product)
+        return product
+    except IntegrityError:
+        db.rollback()
+        raise ValueError("Databse error: Unable to create product.")

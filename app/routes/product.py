@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.crud.product import get_all_products
 from app.crud.product import get_product_by_id
 from app.crud.product import create_product
-from app.schemas.product import ProductSchema, ProductNew
+from app.schemas.product import ProductSchema, ProductNew, ProductShow
 from app.config.dependencies import get_db
 from typing import List, Optional
 
@@ -17,7 +17,7 @@ def get_products(
         category: Optional[str] = Query(None, description="Category"),
         min_price: Optional[float] = Query(None, description="Min Price"),
         max_price: Optional[float] = Query(None, description="Max Price"),
-        stock: Optional[int] = Query(None)
+        stock: Optional[int] = Query(None, description="Min Stock")
     ):
     return get_all_products(db, page, per_page, category, min_price, max_price, stock)
 
@@ -29,8 +29,12 @@ def get_product_detail(id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
-@product.post("/products", response_model=ProductNew)
+@product.post("/products", response_model=ProductShow)
 def new_product(product_params: ProductNew, db: Session = Depends(get_db)):
-    product = create_product(db, product_params)
-
-    return product
+    try:
+        product = create_product(db, product_params)
+        return product
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
