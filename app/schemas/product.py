@@ -12,3 +12,10 @@ class ProductSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+class ProductNew(BaseModel):
+    name: str
+    description: Optional[str] = None
+    category: str
+    price: float
+    sku: str

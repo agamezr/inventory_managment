@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from app.crud.product import get_all_products
 from app.crud.product import get_product_by_id
-from app.schemas.product import ProductSchema
+from app.crud.product import create_product
+from app.schemas.product import ProductSchema, ProductNew
 from app.config.dependencies import get_db
 from typing import List, Optional
 
@@ -28,3 +29,8 @@ def get_product_detail(id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
+@product.post("/products", response_model=ProductNew)
+def new_product(product_params: ProductNew, db: Session = Depends(get_db)):
+    product = create_product(db, product_params)
+
+    return product

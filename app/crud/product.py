@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from app.models.product import Product
 from app.models.inventory import Inventory
 from sqlalchemy.sql import func
+from app.schemas.product import ProductNew
+import uuid
 
 def get_all_products(
         db: Session,
@@ -50,3 +52,17 @@ def get_product_by_id(db: Session, id: str):
         func.coalesce(func.sum(Inventory.quantity), 0).label("available_stock")
     ).outerjoin(Inventory).filter(Product.id == id).group_by(Product.id).first()
 
+def create_product(db: Session, product_params: ProductNew):
+    product = Product(
+        id = str(uuid.uuid4()),
+        name = product_params.name,
+        description = product_params.description,
+        category = product_params.category,
+        price = product_params.price,
+        sku = product_params.sku
+    )
+
+    db.add(product)
+    db.commit()
+    db.refresh(product)
+    return product
