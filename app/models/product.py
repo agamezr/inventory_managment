@@ -1,6 +1,8 @@
 from sqlalchemy import Column, String, Integer, DECIMAL, ForeignKey, DateTime, Enum
 from app.config.database import meta, engine, Base
 from sqlalchemy.orm import relationship
+from app.models.inventory import Inventory 
+from app.models.movement import Movement
 
 class Product(Base):
     __tablename__ = 'products'
