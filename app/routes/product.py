@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from app.crud.product import get_all_products
+from app.crud.product import get_product_by_id
 from app.schemas.product import ProductSchema
 from app.config.dependencies import get_db
 from typing import List, Optional
@@ -8,7 +9,7 @@ from typing import List, Optional
 product = APIRouter()
 
 @product.get("/products", response_model=List[ProductSchema])
-def read_products(
+def get_products(
         db: Session = Depends(get_db),
         page: int = Query(ge=1, default=1, required=False),
         per_page: int = Query(ge=1, le=100, default=10, required=False),
@@ -18,4 +19,12 @@ def read_products(
         stock: Optional[int] = Query(None)
     ):
     return get_all_products(db, page, per_page, category, min_price, max_price, stock)
+
+@product.get("/products/{id}", response_model=ProductSchema)
+def get_product_detail(id: str, db: Session = Depends(get_db)):
+    product = get_product_by_id(db, id)
+
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
 

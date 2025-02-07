@@ -38,3 +38,15 @@ def get_all_products(
                     if page == 1
                     else (page - 1) * per_page
                 ).all()
+
+def get_product_by_id(db: Session, id: str):
+    return db.query(
+        Product.id,
+        Product.name,
+        Product.description,
+        Product.category,
+        Product.price,
+        Product.sku,
+        func.coalesce(func.sum(Inventory.quantity), 0).label("available_stock")
+    ).outerjoin(Inventory).filter(Product.id == id).group_by(Product.id).first()
+
