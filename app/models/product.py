@@ -14,5 +14,5 @@ class Product(Base):
     price = Column(DECIMAL(10, 2), nullable=False)
     sku = Column(String, unique=True, nullable=False)
 
-    inventories = relationship("Inventory", back_populates="product")
+    inventories = relationship("Inventory", back_populates="product", cascade="all, delete-orphan")
     movements = relationship("Movement", back_populates="product")

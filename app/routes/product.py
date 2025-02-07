@@ -4,6 +4,7 @@ from app.crud.product import get_all_products
 from app.crud.product import get_product_by_id
 from app.crud.product import create_product
 from app.crud.product import update_product
+from app.crud.product import delete_product
 from app.schemas.product import ProductSchema, ProductNew, ProductShow, ProductUpdate
 from app.config.dependencies import get_db
 from typing import List, Optional
@@ -53,3 +54,11 @@ def edit_product(id: str, product_params: ProductUpdate, db: Session =  Depends(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error {e}")
     
+@product.delete("/products/{id}")
+def remove_product(id: str, db: Session = Depends(get_db)):
+    product = delete_product(db, id)
+
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    return {"message": f"Product {id} deleted successfully"}

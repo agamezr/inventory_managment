@@ -98,3 +98,17 @@ def update_product(db: Session, id: str, product_params: ProductNew):
     except IntegrityError:
         db.rollback()
         raise ValueError("Database error: Unable to update product.")
+    
+def delete_product(db: Session, product_id: str):
+    product = db.query(Product).filter(Product.id == product_id).first()
+    
+    if not product:
+        return None
+
+    try:
+        db.delete(product)
+        db.commit()
+        return product
+    except IntegrityError:
+        db.rollback()
+        raise ValueError("Database error: Unable to delete product.")
