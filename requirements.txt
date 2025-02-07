@@ -3,3 +3,6 @@ uvicorn
 sqlalchemy
 psycopg2
 python-dotenv
+alembic
+asyncpg
+psycopg2-binary
