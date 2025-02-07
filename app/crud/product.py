@@ -76,3 +76,25 @@ def create_product(db: Session, product_params: ProductNew):
     except IntegrityError:
         db.rollback()
         raise ValueError("Databse error: Unable to create product.")
+    
+def update_product(db: Session, id: str, product_params: ProductNew):
+    product = db.query(Product).filter(Product.id == id).first()
+
+    print(product)
+    if not product:
+        return None
+
+    existing_product = db.query(Product).filter(Product.sku == product_params.sku).first()
+    if existing_product and existing_product.id != product.id:
+        raise ValueError("SKU already exists.")
+    
+    for field, value in product_params.dict(exclude_unset=True).items():
+        setattr(product, field, value)
+
+    try:
+        db.commit()
+        db.refresh(product)
+        return product
+    except IntegrityError:
+        db.rollback()
+        raise ValueError("Database error: Unable to update product.")

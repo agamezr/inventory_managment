@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from app.crud.product import get_all_products
 from app.crud.product import get_product_by_id
 from app.crud.product import create_product
-from app.schemas.product import ProductSchema, ProductNew, ProductShow
+from app.crud.product import update_product
+from app.schemas.product import ProductSchema, ProductNew, ProductShow, ProductUpdate
 from app.config.dependencies import get_db
 from typing import List, Optional
 
@@ -37,4 +38,18 @@ def new_product(product_params: ProductNew, db: Session = Depends(get_db)):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception:
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error {e}")
+
+@product.put("/products/{id}", response_model=ProductShow)
+def edit_product(id: str, product_params: ProductUpdate, db: Session =  Depends(get_db)):
+    try:
+        product = update_product(db, id, product_params)
+        if product is None:
+            raise HTTPException(status_code=404, detail="Product not found")
+        
+        return product
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error {e}")
+    

@@ -37,3 +37,17 @@ class ProductShow(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=3, max_length=100, example="Updated Product")
+    description: Optional[str] = Field(None, max_length=255, example="Updated description")
+    category: Optional[str] = Field(None, min_length=3, max_length=50, example="Updated Electronics")
+    price: Optional[float] = Field(None, gt=0, example=899.99) 
+    sku: Optional[str] = Field(None, min_length=5, max_length=20, example="NEW-SKU")
+
+    @validator("sku")
+    def validate_sku(cls, value):
+        if value and not re.match(r"^[A-Za-z0-9_-]+$", value):
+            raise ValueError("SKU must be alphanumeric.")
+        return value
