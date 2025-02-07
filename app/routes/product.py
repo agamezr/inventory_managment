@@ -12,9 +12,10 @@ def read_products(
         db: Session = Depends(get_db),
         page: int = Query(ge=1, default=1, required=False),
         per_page: int = Query(ge=1, le=100, default=10, required=False),
-        category: Optional[str] = Query(None, description="Categoría del producto"),
-        min_price: Optional[float] = Query(None, description="Precio mínimo"),
-        max_price: Optional[float] = Query(None, description="Precio máximo")
+        category: Optional[str] = Query(None, description="Category"),
+        min_price: Optional[float] = Query(None, description="Min Price"),
+        max_price: Optional[float] = Query(None, description="Max Price"),
+        stock: Optional[int] = Query(None)
     ):
-    return get_all_products(db, page, per_page, category, min_price, max_price)
+    return get_all_products(db, page, per_page, category, min_price, max_price, stock)
 
