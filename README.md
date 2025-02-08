@@ -93,13 +93,33 @@ PYTHONPATH=/app python app/db/seed.py
 ---
 
 ## Daily Work
+
+### 1. Run the project
+This command runs the container
+
+```bash
+docker compose up
+```
+
+### 2. Check Swagger Doc
 Go to the next url to check the API documentation:
 
  [API](http://localhost:8000/docs)
 
----
+### 3. Work with Postman
+
+In the root path of the project you can find a postaman collection in json format
+
+
+Open your Postman client and import a collection
+
+
+```bash
+file:  inventory managment API.postman_collection.json
+```
 
 When you need to stop the project, run:
+
 ```bash
 docker compose down
 ```
