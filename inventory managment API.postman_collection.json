@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "a91303ff-de9e-409c-a856-440606d478b3",
+		"name": "inventory managment API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2693595"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "GET Products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products?page=1&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "Items per page"
+								},
+								{
+									"key": "category",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "min_price",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "max_price",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "stock",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/prod1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"prod1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/prod1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"prod1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Product name\",\n  \"description\": \"Product Description\",\n  \"category\": \"Product Category\",\n  \"price\": 999.99,\n  \"sku\": \"UNIQSKU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Product name\",\n  \"description\": \"Product Description\",\n  \"category\": \"Product Category\",\n  \"price\": 999.99,\n  \"sku\": \"UNIQSKU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products/prod1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"prod1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Get Inventory By Store Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/stores/store001/inventory",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								"store001",
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Inventory Low",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/inventory/alerts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"alerts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": \"string\",\n  \"origin_store_id\": \"string\",\n  \"target_store_id\": \"string\",\n  \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/inventory/transfer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"inventory",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
