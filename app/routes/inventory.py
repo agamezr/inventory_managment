@@ -8,17 +8,17 @@ from typing import List
 inventory = APIRouter()
 
 @inventory.get("/stores/{id}/inventory", response_model=List[InventorySchema])
-def inventory_by_store(id: str, db: Session = Depends(get_db)):
+def inventory_by_store(id: str, db: Session=Depends(get_db)):
     inventory_data = get_inventory_by_store(db, id)
     if not inventory_data:
-        raise HTTPException(status_code=404, detail="No inventory found.")
+        raise HTTPException(status_code=404, detail="No inventory found!")
 
     return inventory_data
 
 @inventory.post("/inventory/transfer")
-def transfer_products(transfer_params: InventoryTransferSchema, db: Session = Depends(get_db)):
+def transfer_products(transfer_params: InventoryTransferSchema, db: Session=Depends(get_db)):
     return transfer_inventory_products(db, transfer_params)
 
-@inventory.get("/inventory/alerts", response_model = List[InventoryLowStockSchema])
-def inventory_low(db: Session = Depends(get_db)):
+@inventory.get("/inventory/alerts", response_model=List[InventoryLowStockSchema])
+def inventory_low(db: Session=Depends(get_db)):
     return get_low_stock_products(db)

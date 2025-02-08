@@ -54,7 +54,6 @@ def get_product_by_id(db: Session, id: str):
     ).outerjoin(Inventory).filter(Product.id == id).group_by(Product.id).first()
 
 def create_product(db: Session, product_params: ProductNewSchema):
-
     existing_product = db.query(Product).filter(Product.sku == product_params.sku).first()
     if existing_product:
         raise ValueError("SKU already exists.")
@@ -84,9 +83,10 @@ def update_product(db: Session, id: str, product_params: ProductNewSchema):
     if not product:
         return None
 
-    existing_product = db.query(Product).filter(Product.sku == product_params.sku).first()
-    if existing_product and existing_product.id != product.id:
-        raise ValueError("SKU already exists.")
+    if product_params.sku:
+        existing_product = db.query(Product).filter(Product.sku == product_params.sku).first()
+        if existing_product and existing_product.id != product.id:
+            raise ValueError("SKU already exists.")
     
     for field, value in product_params.dict(exclude_unset=True).items():
         setattr(product, field, value)
