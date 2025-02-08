@@ -1,10 +1,12 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session, joinedload
 from app.models.inventory import Inventory
+from app.models.movement import Movement, MovementType
 from app.models.product import Product
 from app.schemas.inventory import InventoryTransferSchema
 from sqlalchemy.exc import IntegrityError
 import uuid
-from fastapi import HTTPException
+from datetime import datetime
 
 def get_inventory_by_store(db: Session, store_id: str):
     return db.query(Inventory).options(joinedload(Inventory.product)).filter(Inventory.store_id == store_id).all()
@@ -43,13 +45,24 @@ def transfer_inventory_products(db: Session, transfer_params: InventoryTransferS
     origin_inventory_data.quantity -= transfer_params.quantity
     target_inventory_data.quantity += transfer_params.quantity
 
+    movement = Movement(
+        id = str(uuid.uuid4()),
+        product_id = transfer_params.product_id,
+        source_store_id = transfer_params.origin_store_id,
+        target_store_id = transfer_params.target_store_id,
+        quantity = transfer_params.quantity,
+        timestamp = datetime.utcnow(),
+        type = MovementType.TRANSFER
+    )
+    db.add(movement)
+
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=500, detail="Database error during transfer")
+        raise HTTPException(status_code=500, detail="Database error during transfer!")
 
-    return {"message": "Transfer successful"}
+    return {"message": "Transfer successful!"}
 
 def get_low_stock_products(db: Session):
     return db.query(
