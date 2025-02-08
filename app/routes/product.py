@@ -34,7 +34,7 @@ def new_product(product_params: ProductNewSchema, db: Session=Depends(get_db)):
         return product
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    except Exception:
+    except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error {e}!")
 
 @product.put("/products/{id}", response_model=ProductShowSchema)
