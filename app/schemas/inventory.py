@@ -11,7 +11,7 @@ class BaseInventorySchema(BaseModel):
     product: Optional[ProductShowSchema]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class InventorySchema(BaseInventorySchema):
     pass
@@ -23,7 +23,7 @@ class InventoryTransferSchema(BaseModel):
     quantity: PositiveInt
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class InventoryLowStockSchema(BaseModel):
     id: str
@@ -37,4 +37,4 @@ class InventoryLowStockSchema(BaseModel):
     min_stock: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
