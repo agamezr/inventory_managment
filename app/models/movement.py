@@ -1,9 +1,8 @@
-from sqlalchemy import Column, String, Integer, DECIMAL, ForeignKey, DateTime, Enum
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Enum
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from app.config.database import meta, engine, Base
+from app.config.database import Base
 import enum
-
 
 class MovementType(enum.Enum):
     IN = "IN"
