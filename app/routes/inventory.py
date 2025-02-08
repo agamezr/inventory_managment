@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from app.schemas.inventory import InventorySchema
-from app.schemas.inventory import InventoryTransfer
+from app.schemas.inventory import InventoryTransfer, InventoryLowStock
 from app.config.dependencies import get_db
-from app.crud.inventory import get_inventory_by_store, transfer_inventory_products
+from app.crud.inventory import get_inventory_by_store, transfer_inventory_products, get_low_stock_products
 from typing import List
 
 inventory = APIRouter()
@@ -20,3 +20,7 @@ def inventory_by_store(id: str, db: Session = Depends(get_db)):
 @inventory.post("/inventory/transfer")
 def transfer_products(transfer_params: InventoryTransfer, db: Session = Depends(get_db)):
     return transfer_inventory_products(db, transfer_params)
+
+@inventory.get("/inventory/alerts", response_model = List[InventoryLowStock])
+def inventory_low(db: Session = Depends(get_db)):
+    return get_low_stock_products(db)

@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session, joinedload
 from app.models.inventory import Inventory
+from app.models.product import Product
 from app.schemas.inventory import InventoryTransfer
 from sqlalchemy.exc import IntegrityError
 import uuid
@@ -49,3 +50,18 @@ def transfer_inventory_products(db: Session, transfer_params: InventoryTransfer)
         raise HTTPException(status_code=500, detail="Database error during transfer")
 
     return {"message": "Transfer successful"}
+
+def get_low_stock_products(db: Session):
+    return db.query(
+        Product.id,
+        Product.name,
+        Product.description,
+        Product.category,
+        Product.price,
+        Product.sku,
+        Inventory.store_id,
+        Inventory.quantity,
+        Inventory.min_stock
+    ).join(Inventory, Inventory.product_id == Product.id).filter(Inventory.quantity < Inventory.min_stock).all()
+
+

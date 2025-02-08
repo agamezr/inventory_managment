@@ -21,3 +21,14 @@ class InventoryTransfer(BaseModel):
 
     class Config:
         orm_mode = True
+
+class InventoryLowStock(BaseModel):
+    id: str
+    name: str
+    description: Optional[str] = None
+    category: str
+    price: float
+    sku: str
+    store_id: str
+    quantity: int
+    min_stock: int
