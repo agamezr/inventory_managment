@@ -2,19 +2,22 @@ from pydantic import BaseModel, Field, validator
 from typing import Optional
 import re
 
-class ProductSchema(BaseModel):
+class ProductShowSchema(BaseModel):
     id: str
     name: str
     description: Optional[str] = None
     category: str
     price: float
     sku: str
-    available_stock: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
-class ProductNew(BaseModel):
+class ProductSchema(ProductShowSchema):
+    pass
+    available_stock: int
+
+class BaseProductSchema(BaseModel):
     name: str = Field(..., min_length=3, max_length=100, example="Laptop")
     description: Optional[str] = Field(None, max_length=255, example="Asus Laptop 32GB RAM")
     category: str = Field(..., min_length=3, max_length=50, example="Electronics")
@@ -26,28 +29,13 @@ class ProductNew(BaseModel):
         if not re.match(r"^[A-Za-z0-9_-]+$", value):
             raise ValueError("SKU must be alphanumeric.")
         return value
-    
-class ProductShow(BaseModel):
-    id: str
-    name: str
+
+class ProductNewSchema(BaseProductSchema):
+    pass
+
+class ProductUpdateSchema(BaseProductSchema):
+    name: Optional[str] = None
     description: Optional[str] = None
-    category: str
-    price: float
-    sku: str
-
-    class Config:
-        orm_mode = True
-
-
-class ProductUpdate(BaseModel):
-    name: Optional[str] = Field(None, min_length=3, max_length=100, example="Updated Product")
-    description: Optional[str] = Field(None, max_length=255, example="Updated description")
-    category: Optional[str] = Field(None, min_length=3, max_length=50, example="Updated Electronics")
-    price: Optional[float] = Field(None, gt=0, example=899.99) 
-    sku: Optional[str] = Field(None, min_length=5, max_length=20, example="NEW-SKU")
-
-    @validator("sku")
-    def validate_sku(cls, value):
-        if value and not re.match(r"^[A-Za-z0-9_-]+$", value):
-            raise ValueError("SKU must be alphanumeric.")
-        return value
+    category: Optional[str] = None
+    price: Optional[float] = None
+    sku: Optional[str] = None

@@ -6,3 +6,4 @@ python-dotenv
 alembic
 asyncpg
 psycopg2-binary
+Faker
