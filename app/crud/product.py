@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app.models.product import Product
 from app.models.inventory import Inventory
 from sqlalchemy.sql import func
-from app.schemas.product import ProductNew
+from app.schemas.product import ProductNewSchema
 from sqlalchemy.exc import IntegrityError
 import uuid
 
@@ -53,7 +53,7 @@ def get_product_by_id(db: Session, id: str):
         func.coalesce(func.sum(Inventory.quantity), 0).label("available_stock")
     ).outerjoin(Inventory).filter(Product.id == id).group_by(Product.id).first()
 
-def create_product(db: Session, product_params: ProductNew):
+def create_product(db: Session, product_params: ProductNewSchema):
 
     existing_product = db.query(Product).filter(Product.sku == product_params.sku).first()
     if existing_product:
@@ -77,7 +77,7 @@ def create_product(db: Session, product_params: ProductNew):
         db.rollback()
         raise ValueError("Databse error: Unable to create product.")
     
-def update_product(db: Session, id: str, product_params: ProductNew):
+def update_product(db: Session, id: str, product_params: ProductNewSchema):
     product = db.query(Product).filter(Product.id == id).first()
 
     print(product)

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session, joinedload
 from app.models.inventory import Inventory
 from app.models.product import Product
-from app.schemas.inventory import InventoryTransfer
+from app.schemas.inventory import InventoryTransferSchema
 from sqlalchemy.exc import IntegrityError
 import uuid
 from fastapi import HTTPException
@@ -9,7 +9,7 @@ from fastapi import HTTPException
 def get_inventory_by_store(db: Session, store_id: str):
     return db.query(Inventory).options(joinedload(Inventory.product)).filter(Inventory.store_id == store_id).all()
 
-def transfer_inventory_products(db: Session, transfer_params: InventoryTransfer):
+def transfer_inventory_products(db: Session, transfer_params: InventoryTransferSchema):
     origin_inventory_data = db.query(Inventory).filter(
             Inventory.store_id == transfer_params.origin_store_id,
             Inventory.product_id == transfer_params.product_id

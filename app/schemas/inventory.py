@@ -1,6 +1,6 @@
 from pydantic import BaseModel, PositiveInt
 from typing import Optional
-from app.schemas.product import ProductShow
+from app.schemas.product import ProductShowSchema
 
 class InventorySchema(BaseModel):
     id: str
@@ -8,12 +8,12 @@ class InventorySchema(BaseModel):
     store_id: str
     quantity: int
     min_stock: int
-    product: Optional[ProductShow]
+    product: Optional[ProductShowSchema]
 
     class Config:
         orm_mode = True
 
-class InventoryTransfer(BaseModel):
+class InventoryTransferSchema(BaseModel):
     product_id: str
     origin_store_id: str
     target_store_id: str
@@ -22,7 +22,7 @@ class InventoryTransfer(BaseModel):
     class Config:
         orm_mode = True
 
-class InventoryLowStock(BaseModel):
+class InventoryLowStockSchema(BaseModel):
     id: str
     name: str
     description: Optional[str] = None
@@ -32,3 +32,6 @@ class InventoryLowStock(BaseModel):
     store_id: str
     quantity: int
     min_stock: int
+
+    class Config:
+        orm_mode = True

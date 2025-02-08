@@ -1,11 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
-from app.crud.product import get_all_products
-from app.crud.product import get_product_by_id
-from app.crud.product import create_product
-from app.crud.product import update_product
-from app.crud.product import delete_product
-from app.schemas.product import ProductSchema, ProductNew, ProductShow, ProductUpdate
+from app.crud.product import get_all_products, get_product_by_id, create_product, update_product, delete_product
+from app.schemas.product import ProductSchema, ProductNewSchema, ProductShowSchema, ProductUpdateSchema
 from app.config.dependencies import get_db
 from typing import List, Optional
 
@@ -31,8 +27,8 @@ def get_product_detail(id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
-@product.post("/products", response_model=ProductShow)
-def new_product(product_params: ProductNew, db: Session = Depends(get_db)):
+@product.post("/products", response_model=ProductShowSchema)
+def new_product(product_params: ProductNewSchema, db: Session = Depends(get_db)):
     try:
         product = create_product(db, product_params)
         return product
@@ -41,8 +37,8 @@ def new_product(product_params: ProductNew, db: Session = Depends(get_db)):
     except Exception:
         raise HTTPException(status_code=500, detail=f"Internal Server Error {e}")
 
-@product.put("/products/{id}", response_model=ProductShow)
-def edit_product(id: str, product_params: ProductUpdate, db: Session =  Depends(get_db)):
+@product.put("/products/{id}", response_model=ProductShowSchema)
+def edit_product(id: str, product_params: ProductUpdateSchema, db: Session =  Depends(get_db)):
     try:
         product = update_product(db, id, product_params)
         if product is None:

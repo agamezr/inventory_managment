@@ -14,7 +14,7 @@ class ProductSchema(BaseModel):
     class Config:
         orm_mode = True
 
-class ProductNew(BaseModel):
+class ProductNewSchema(BaseModel):
     name: str = Field(..., min_length=3, max_length=100, example="Laptop")
     description: Optional[str] = Field(None, max_length=255, example="Asus Laptop 32GB RAM")
     category: str = Field(..., min_length=3, max_length=50, example="Electronics")
@@ -27,7 +27,7 @@ class ProductNew(BaseModel):
             raise ValueError("SKU must be alphanumeric.")
         return value
     
-class ProductShow(BaseModel):
+class ProductShowSchema(BaseModel):
     id: str
     name: str
     description: Optional[str] = None
@@ -39,7 +39,7 @@ class ProductShow(BaseModel):
         orm_mode = True
 
 
-class ProductUpdate(BaseModel):
+class ProductUpdateSchema(BaseModel):
     name: Optional[str] = Field(None, min_length=3, max_length=100, example="Updated Product")
     description: Optional[str] = Field(None, max_length=255, example="Updated description")
     category: Optional[str] = Field(None, min_length=3, max_length=50, example="Updated Electronics")
