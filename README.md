@@ -47,6 +47,11 @@ DB_HOST=               # PostgreSQL host (e.g., localhost)
 DB_PORT=               # PostgreSQL port (default: 5432)
 DATABASE_URL=          # Database URL
 ```
+**if you are setup the project in a EC2 instance you can copy your local .env file to your instance:**
+
+```bash
+sc -i "pem_file.pem" .env ec2-user@PUBLIC_IP:/home/ec2-user/YOUR/PATH/inventory_managment
+```
 
 ### 3. Replace this line with the same value of DATABASE_URL in the .env in alembic.ini file
 
@@ -54,6 +59,13 @@ DATABASE_URL=          # Database URL
 # alembic.ini
 sqlalchemy.url =
 ```
+
+**if you are setup the project in a EC2 instance you can use nano to update the file:**
+
+```bash
+nano alembic.ini
+```
+
 
 ### 4. Build the project
 Docker must be running and your console must be in the project path
@@ -65,10 +77,8 @@ docker compose build
 ### 5. Run migrations 
 This command creates the Database
 
-db service must be running, run the container 
-```bash
-docker compose up -d
-```
+- ```docker compose up``` must be running in another console/terminal
+- or ```docker compose up -d``` to run containers in the background
 
 ```bash
 docker compose run python-api alembic upgrade head
@@ -81,7 +91,6 @@ This command runs the container
 ```bash
 docker compose up
 ```
-
 
 ### 7. Create default data for database (only the first time)
 This commands runs a script to charge default information.
@@ -101,6 +110,24 @@ PYTHONPATH=/app python app/db/seed.py
 ```bash
 exit
 ```
+
+### 8 Use the API
+
+Run the project
+```bash
+docker compose up
+```
+
+or
+```bash
+docker compose up
+```
+
+Open the API in the local port 8000:
+- http://localhost:8000/docs
+
+If you are currently setup the project in a EC2 instance check:
+- http://PUBLIC_IP:8000/docs
 
 ---
 
@@ -135,3 +162,83 @@ When you need to stop the project, run:
 ```bash
 docker compose down
 ```
+
+## AWS Deployment
+
+Follow these steps to deploy :
+
+### 1.  Create a EC2 Instance
+- Go to AWS
+- Search and open **EC2** service
+- Go to dashboard
+- Select the option **Launch instance**
+- Name your instance
+- Select **Amazon Linux**
+- Name your instance
+- Create a new key pair (PEM FILE)
+- **Launch Instance**
+
+### 2.  Config port for the API
+- Go to the instance page
+- Go to secuirity and secuirity group
+- **Edit inbound rules**
+- Add the port
+
+
+
+### 3. Connect with the instance from local
+
+Give the correct permissions to your pem file
+
+```bash
+chmod 400 pem_file
+```
+
+Connect to the instance
+
+```bash
+ssh -i "pem_file.pem" ec2-user@PUBLIC_IP
+```
+
+or
+
+```bash
+ssh -i "pem_file.pem" ec2-user@DNS
+```
+
+### 4. Setup the instance tools
+
+Install docker
+
+```bash
+sudo yum install -y docker
+```
+
+Run docker service
+```bash
+sudo service docker start
+```
+
+Add ec2-user to docker group
+```bash
+sudo usermod -a -G docker ec2-user
+```
+Reload a Linux user's group assignments to docker w/o logout
+```bash
+newgrp docker
+```
+Enable automatic docker service
+```bash
+sudo chkconfig docker on
+```
+
+Install docker compose
+```bash
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+```
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+Follow **Installation** steps into the EC2 instance
+
