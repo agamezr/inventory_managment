@@ -120,7 +120,7 @@ docker compose up
 
 or
 ```bash
-docker compose up
+docker compose up -d
 ```
 
 Open the API in the local port 8000:
@@ -248,6 +248,11 @@ sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-c
 ```bash
 sudo chmod +x /usr/local/bin/docker-compose
 ```
+Install git
+```bash
+sudo yum install -y git
+```
+
 
 Follow **Installation** steps into the EC2 instance
 
