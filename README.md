@@ -111,7 +111,7 @@ PYTHONPATH=/app python app/db/seed.py
 exit
 ```
 
-### 8 Use the API
+### 8.  Use the API
 
 Run the project
 ```bash
@@ -170,20 +170,29 @@ Follow these steps to deploy :
 ### 1.  Create a EC2 Instance
 - Go to AWS
 - Search and open **EC2** service
+  - [view image](https://drive.google.com/file/d/1cvPtXn8-ypxuPwDA1ClsKJyPXR6hjG5b/view)
+ 
 - Go to dashboard
 - Select the option **Launch instance**
+  - [view image](https://drive.google.com/file/d/17uUDi10pFfbUlR0_HoDUJl8Vdyksd2bi/view?usp=drive_link)
+ 
+  
 - Name your instance
 - Select **Amazon Linux**
-- Name your instance
+  - [view image](https://drive.google.com/file/d/1e4EvrtQvMPQ0aeHnrUEpU5hGz_0t65ch/view?usp=sharing) 
+
 - Create a new key pair (PEM FILE)
 - **Launch Instance**
+  - [view image](https://drive.google.com/file/d/1khgf5QjhW8WWxrIf2mVnZo0f_eOQDD3X/view?usp=sharing)
 
 ### 2.  Config port for the API
 - Go to the instance page
 - Go to secuirity and secuirity group
+  - [view image](https://drive.google.com/file/d/1yn_byFibUEDVlWOz4nlvyL2mPNYz3xoU/view?usp=sharing)
+ 
 - **Edit inbound rules**
 - Add the port
-
+  - [view image](https://drive.google.com/file/d/19f_F7415feMq4eV49A0Ciw6t10NGEtIr/view?usp=sharing)
 
 
 ### 3. Connect with the instance from local
