@@ -36,7 +36,6 @@ def get_all_products(
     if stock is not None:
         products = products.having(func.coalesce(func.sum(Inventory.quantity), 0) >= stock)
 
-
     return products.limit(per_page).offset(
                     page - 1
                     if page == 1
