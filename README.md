@@ -17,6 +17,9 @@ Before you get started, make sure you have the following installed on your machi
 - **docker**
 - **docker compose**
 
+## Notes
+Using the ```docker compose``` or ```docker-compose``` command will depend on your version and configuration of docker compose.
+
 ---
 
 ## Installation
@@ -62,6 +65,11 @@ docker compose build
 ### 5. Run migrations 
 This command creates the Database
 
+db service must be running, run the container 
+```bash
+docker compose up -d
+```
+
 ```bash
 docker compose run python-api alembic upgrade head
 ```
@@ -78,6 +86,7 @@ docker compose up
 ### 7. Create default data for database (only the first time)
 This commands runs a script to charge default information.
 - ```docker compose up``` must be running in another console/terminal
+- or ```docker compose up -d``` to run containers in the background
 
 Start an interactive session inside the container using the shell
 ```bash
@@ -89,6 +98,9 @@ Inside the container run
 PYTHONPATH=/app python app/db/seed.py
 ```
 
+```bash
+exit
+```
 
 ---
 
