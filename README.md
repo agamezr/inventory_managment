@@ -126,7 +126,7 @@ docker compose up -d
 Open the API in the local port 8000:
 - http://localhost:8000/docs
 
-If you are currently setup the project in a EC2 instance check:
+**If you are currently setup the project in a EC2 instance check:**
 - http://PUBLIC_IP:8000/docs
 
 ---
